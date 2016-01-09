@@ -1,9 +1,9 @@
-    // Christmas Color Changer for 3 Analog LED Strips
+// Christmas Color Changer for 3 Analog LED Strips
 
 #include <FastLED.h>
 
-// 2 LED strips with R, G, B LEDS on each, so there are 6 channels to control via FET transistors
-// use the 6 PWM digital I/O pins for the FET gate pins
+// 3 LED strips with R, G, B LEDS on each, so there are 9 channels to control via FET transistors
+// use the PWM digital I/O pins for the FET gate pins
 #define ledR1 3
 #define ledG1 4
 #define ledB1 5
@@ -25,7 +25,7 @@
 // Pin 11: Teensy 2.0 has the LED on pin 11
 // Pin  6: Teensy++ 2.0 has the LED on pin 6
 // Pin 13: Teensy 3.0 has the LED on pin 13
-const int ledPin =  13;      // the number of the LED pin
+const int ledPin = 13; // the number of the LED pin
 
 const int numStrips = 3;
 
@@ -72,13 +72,13 @@ void all_off()
 
 void led_swap()
 {
-    if (ledState == LOW)
-      ledState = HIGH;
-    else
-      ledState = LOW;
+  if (ledState == LOW)
+    ledState = HIGH;
+  else
+    ledState = LOW;
 
-    // set the LED with the ledState of the variable:
-    digitalWrite(ledPin, ledState);
+  // set the LED with the ledState of the variable:
+  digitalWrite(ledPin, ledState);
 }
 
 void SetPWMValue(byte pin, byte value) {
@@ -98,84 +98,53 @@ void colorBars()
   showAnalogRGBs( all_strips, CRGB::Black ); delay(500);
 }
 
-    void slow_xmas_fade() {
-      // set all the LEDs to off
-      SetPWMValue(ledR1, 0);
-      SetPWMValue(ledG1, 0);
-      SetPWMValue(ledB1, 0);
-      SetPWMValue(ledR2, 0);
-      SetPWMValue(ledG2, 0);
-      SetPWMValue(ledB2, 0);
-      SetPWMValue(ledR3, 0);
-      SetPWMValue(ledG3, 0);
-      SetPWMValue(ledB3, 0);
-      int i;    
+void slow_xmas_fade() {
+  // set all the LEDs to off
+  SetPWMValue(ledR1, 0);
+  SetPWMValue(ledG1, 0);
+  SetPWMValue(ledB1, 0);
+  SetPWMValue(ledR2, 0);
+  SetPWMValue(ledG2, 0);
+  SetPWMValue(ledB2, 0);
+  SetPWMValue(ledR3, 0);
+  SetPWMValue(ledG3, 0);
+  SetPWMValue(ledB3, 0);
+  int i;    
       
-//      for (i = 0; i < 256; i++) {
-//        SetPWMValue(ledR1, i);
-//        SetPWMValue(ledR2, i);
-//        SetPWMValue(ledR3, i);
-//        delay(FADESPEED);
-//      }
-//      delay(ONTIME);
-//      led_swap();
-//      for (i = 0; i < 256; i++) {
-//        SetPWMValue(ledR1, 255-i);
-//        SetPWMValue(ledR2, 255-i);
-//        SetPWMValue(ledR3, 255-i);
-//        delay(FADESPEED);
-//      }
-//      delay(OFFTIME);
-//      led_swap();
-//      for (i = 0; i < 256; i++) {
-//        SetPWMValue(ledG1, i);
-//        SetPWMValue(ledG2, i);
-//        SetPWMValue(ledG3, i);
-//        delay(FADESPEED);
-//      }
-//      delay(ONTIME);
-//      led_swap();
-//      for (i = 0; i < 256; i++) {
-//        SetPWMValue(ledG1, 255-i);
-//        SetPWMValue(ledG2, 255-i);
-//        SetPWMValue(ledG3, 255-i);
-//        delay(FADESPEED);
-//      }
-//      delay(OFFTIME);
-      led_swap();
-      for (i = 0; i < 256; i++) {
-        SetPWMValue(ledR1, i);
-        SetPWMValue(ledG2, i);
-        SetPWMValue(ledR3, i);
-        delay(FADESPEED);
-      }
-      delay(ONTIME);
-      led_swap();
-      for (i = 0; i < 256; i++) {
-        SetPWMValue(ledR1, 255-i);
-        SetPWMValue(ledG2, 255-i);
-        SetPWMValue(ledR3, 255-i);
-        delay(FADESPEED);
-      }
-      delay(OFFTIME);
-      led_swap();
-      for (i = 0; i < 256; i++) {
-        SetPWMValue(ledG1, i);
-        SetPWMValue(ledR2, i);
-        SetPWMValue(ledG3, i);
-        delay(FADESPEED);
-      }
-      delay(ONTIME);
-      led_swap();
-      for (i = 0; i < 256; i++) {
-        SetPWMValue(ledG1, 255-i);
-        SetPWMValue(ledR2, 255-i);
-        SetPWMValue(ledG3, 255-i);
-        delay(FADESPEED);
-      }
-      delay(OFFTIME);
-      led_swap();
+  led_swap();
+  for (i = 0; i < 256; i++) {
+    SetPWMValue(ledR1, i);
+    SetPWMValue(ledG2, i);
+    SetPWMValue(ledR3, i);
+    delay(FADESPEED);
   }
+  delay(ONTIME);
+  led_swap();
+  for (i = 0; i < 256; i++) {
+    SetPWMValue(ledR1, 255-i);
+    SetPWMValue(ledG2, 255-i);
+    SetPWMValue(ledR3, 255-i);
+    delay(FADESPEED);
+  }
+  delay(OFFTIME);
+  led_swap();
+  for (i = 0; i < 256; i++) {
+    SetPWMValue(ledG1, i);
+    SetPWMValue(ledR2, i);
+    SetPWMValue(ledG3, i);
+    delay(FADESPEED);
+  }
+  delay(ONTIME);
+  led_swap();
+  for (i = 0; i < 256; i++) {
+    SetPWMValue(ledG1, 255-i);
+    SetPWMValue(ledR2, 255-i);
+    SetPWMValue(ledG3, 255-i);
+    delay(FADESPEED);
+  }
+  delay(OFFTIME);
+  led_swap();
+}
 
 void setup() {
   // set the digital pin as output:
@@ -216,18 +185,16 @@ void xmas_run(const int outer_loops)
   int i;
   int j;
   for (j = 0; j < outer_loops; j++) {
-  for (i = 0; i < numStrips; i++) {
-    showAnalogRGB( i, CRGB::Red ); delay(delay_time);
+    for (i = 0; i < numStrips; i++) {
+      showAnalogRGB( i, CRGB::Red ); delay(delay_time);
+    }
+    for (i = 0; i < numStrips; i++) {
+      showAnalogRGB( i, CRGB::Green ); delay(delay_time);
+    }
+    for (i = 0; i < numStrips; i++) {
+      showAnalogRGB( i, CRGB::Black ); delay(delay_time);
+    }
   }
-  for (i = 0; i < numStrips; i++) {
-    showAnalogRGB( i, CRGB::Green ); delay(delay_time);
-  }
-  for (i = 0; i < numStrips; i++) {
-    showAnalogRGB( i, CRGB::Black ); delay(delay_time);
-  }
-  }
-  // boolean strips[] = {true, false, false};
-  // showAnalogRGBs( all_strips, CRGB::Red ); delay(delay_time);
 }
 
 void random_xmas(const int switches)
@@ -250,7 +217,7 @@ void random_xmas(const int switches)
   }
 }
 
-void cal(int switches)
+void cal_flash(int switches)
 {
   all_off();
   int i;
@@ -270,7 +237,7 @@ void cal(int switches)
     
 void loop()
 {
-  cal(50);
+  cal_flash(50);
   rainbow(5);
   xmas_run(3);
   random_xmas(100);
