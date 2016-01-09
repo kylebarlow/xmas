@@ -59,7 +59,7 @@ void showAnalogRGBs( boolean led_strips[], const CRGB& rgb)
   int i;
   for (i = 0; i < numStrips; i++) {
     if ( led_strips[i] ) {
-      showAnalogRGB(i, rgb);
+\      showAnalogRGB(i, rgb);
     }
   }
 }
