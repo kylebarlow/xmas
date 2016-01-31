@@ -15,7 +15,7 @@
 #define ledR3 20
 #define ledG3 21
 #define ledB3 22
-    
+
 #define FADESPEED 30 // make this higher to slow down
 #define OFFTIME 400
 #define ONTIME 60000
@@ -36,7 +36,7 @@ long previousMillis = 0;        // will store last time LED was updated
 // the follow variables is a long because the time, measured in miliseconds,
 // will quickly become a bigger number than can be stored in an int.
 long interval = 10000;           // interval at which to blink (milliseconds)
-    
+
 void showAnalogRGB( const int strip_num, const CRGB& rgb)
 {
   if ( strip_num == 0 ) {
@@ -109,8 +109,8 @@ void slow_xmas_fade() {
   SetPWMValue(ledR3, 0);
   SetPWMValue(ledG3, 0);
   SetPWMValue(ledB3, 0);
-  int i;    
-      
+  int i;
+
   led_swap();
   for (i = 0; i < 256; i++) {
     SetPWMValue(ledR3, i);
@@ -146,12 +146,12 @@ void setup() {
   pinMode(ledR3, OUTPUT);
   pinMode(ledG3, OUTPUT);
   pinMode(ledB3, OUTPUT);
-  
+
   // Flash the "hello" color sequence: R, G, B, black.
   colorBars();
 }
 
-void rainbow(int num_rainbow_loops) 
+void rainbow(int num_rainbow_loops)
 {
   boolean all_strips[] = {true, true, true};
   int hue;
@@ -167,7 +167,7 @@ void rainbow(int num_rainbow_loops)
   }
 }
 
-void rainbow_forever() 
+void rainbow_forever()
 {
   byte hue1 = 0;
   byte hue2 = 85;
@@ -273,17 +273,16 @@ void gb_slow(int switches)
     showAnalogRGB( 2, CHSV( 30, 255, 138 ) );
     delay(ONTIME);
   }
-}  
-    
+}
+
 void loop()
 {
   rainbow_forever();
   //cal_flash(5);
   //cal_slow(4);
   //gb_slow(4);
-  
+
   //xmas_run(2);
   //random_xmas(100);
   //slow_xmas_fade();
 }
-
