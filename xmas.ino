@@ -18,7 +18,7 @@
     
 #define FADESPEED 30 // make this higher to slow down
 #define OFFTIME 400
-#define ONTIME 12000
+#define ONTIME 60000
 
 // constants won't change. Used here to set pin numbers:
 // Pin 13: Arduino has an LED connected on pin 13
@@ -113,37 +113,25 @@ void slow_xmas_fade() {
       
   led_swap();
   for (i = 0; i < 256; i++) {
-    SetPWMValue(ledR1, i);
-    SetPWMValue(ledG2, i);
     SetPWMValue(ledR3, i);
-    delay(FADESPEED);
-  }
-  delay(ONTIME);
-  led_swap();
-  for (i = 0; i < 256; i++) {
-    SetPWMValue(ledR1, 255-i);
-    SetPWMValue(ledG2, 255-i);
-    SetPWMValue(ledR3, 255-i);
-    delay(FADESPEED);
-  }
-  delay(OFFTIME);
-  led_swap();
-  for (i = 0; i < 256; i++) {
-    SetPWMValue(ledG1, i);
     SetPWMValue(ledR2, i);
-    SetPWMValue(ledG3, i);
+    SetPWMValue(ledG2, i);
+    SetPWMValue(ledB2, i);
+    SetPWMValue(ledB1, i);
     delay(FADESPEED);
   }
   delay(ONTIME);
   led_swap();
   for (i = 0; i < 256; i++) {
-    SetPWMValue(ledG1, 255-i);
+    SetPWMValue(ledR3, 255-i);
     SetPWMValue(ledR2, 255-i);
-    SetPWMValue(ledG3, 255-i);
+    SetPWMValue(ledG2, 255-i);
+    SetPWMValue(ledB2, 255-i);
+    SetPWMValue(ledB1, 255-i);
     delay(FADESPEED);
   }
-  delay(OFFTIME);
-  led_swap();
+  delay(OFFTIME);  led_swap();
+
 }
 
 void setup() {
@@ -173,8 +161,24 @@ void rainbow(int num_rainbow_loops)
       hue = hue + 1;
       // Use FastLED automatic HSV->RGB conversion
       showAnalogRGBs( all_strips, CHSV( hue, 255, 255) );
-      delay(20);
+      //delay(40);
+      delay(2353);
     }
+  }
+}
+
+void rainbow_forever() 
+{
+  byte hue1 = 0;
+  byte hue2 = 85;
+  byte hue3 = 170;
+  while (true) {
+    showAnalogRGB( 0, CHSV( hue1, 255, 255) );
+    showAnalogRGB( 1, CHSV( hue2, 255, 255) );
+    showAnalogRGB( 2, CHSV( hue3, 255, 255) );
+    hue1++; hue2++; hue3++;
+    //delay(2353);
+    delay(500);
   }
 }
 
@@ -234,13 +238,52 @@ void cal_flash(int switches)
     delay(500);
   }
 }
+
+void cal_slow(int switches)
+{
+  all_off();
+  int i;
+  int led_strip;
+  int color_i;
+  for (i = 0; i < switches; i++) {
+    showAnalogRGB( 0, CHSV( 152, 255, 77 ) );
+    showAnalogRGB( 2, CHSV( 152, 255, 77 ) );
+    showAnalogRGB( 1, CHSV( 33, 232, 252 ) );
+    delay(ONTIME);
+    showAnalogRGB( 1, CHSV( 152, 255, 77 ) );
+    showAnalogRGB( 0, CHSV( 33, 232, 252 ) );
+    showAnalogRGB( 2, CHSV( 33, 232, 252 ) );
+    delay(OFFTIME);
+  }
+}
+
+void gb_slow(int switches)
+{
+  all_off();
+  int i;
+  int led_strip;
+  int color_i;
+  for (i = 0; i < switches; i++) {
+    showAnalogRGB( 0, CHSV( 85, 209, 173 ) );
+    showAnalogRGB( 1, CHSV( 30, 255, 138 ) );
+    showAnalogRGB( 2, CHSV( 85, 209, 173 ) );
+    delay(ONTIME);
+    showAnalogRGB( 0, CHSV( 30, 255, 138 ) );
+    showAnalogRGB( 1, CHSV( 85, 209, 173 ) );
+    showAnalogRGB( 2, CHSV( 30, 255, 138 ) );
+    delay(ONTIME);
+  }
+}  
     
 void loop()
 {
-  cal_flash(50);
-  rainbow(5);
-  xmas_run(3);
-  random_xmas(100);
-  slow_xmas_fade();
+  rainbow_forever();
+  //cal_flash(5);
+  //cal_slow(4);
+  //gb_slow(4);
+  
+  //xmas_run(2);
+  //random_xmas(100);
+  //slow_xmas_fade();
 }
 
