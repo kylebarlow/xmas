@@ -114,20 +114,16 @@ void slow_xmas_fade() {
   led_swap();
   for (i = 0; i < 256; i++) {
     SetPWMValue(ledR3, i);
-    SetPWMValue(ledR2, i);
     SetPWMValue(ledG2, i);
-    SetPWMValue(ledB2, i);
-    SetPWMValue(ledB1, i);
+    SetPWMValue(ledR1, i);
     delay(FADESPEED);
   }
   delay(ONTIME);
   led_swap();
   for (i = 0; i < 256; i++) {
     SetPWMValue(ledR3, 255-i);
-    SetPWMValue(ledR2, 255-i);
     SetPWMValue(ledG2, 255-i);
-    SetPWMValue(ledB2, 255-i);
-    SetPWMValue(ledB1, 255-i);
+    SetPWMValue(ledR1, 255-i);
     delay(FADESPEED);
   }
   delay(OFFTIME);  led_swap();
@@ -135,6 +131,7 @@ void slow_xmas_fade() {
 }
 
 void setup() {
+  delay( 1000 ); // power-up safety delay
   // set the digital pin as output:
   pinMode(ledPin, OUTPUT);
   pinMode(ledR1, OUTPUT);
@@ -153,7 +150,28 @@ void setup() {
   colorBars();
 }
 
-void rainbow(int num_rainbow_loops)
+void pride (int num_loops, unsigned int sleep_time )
+{
+  const int num_colors = 6;
+  CRGB pride_colors[] = { CRGB::Red, CRGB::OrangeRed, CRGB::Orange, CRGB::Green, CRGB::Blue, CRGB::Purple };
+  int current_color_index[ numStrips ];
+  for ( int n = 0 ; n < numStrips ; n++ ) {
+    current_color_index[n] = n;
+  }
+    
+  for ( unsigned long i = 0 ; i <= 10 ; i++ ) {
+    for ( int n = 0 ; n < numStrips ; n++ ) {
+      showAnalogRGB( n, pride_colors[ current_color_index[n] ]);
+      current_color_index[n] = current_color_index[n] + 1;
+      if ( current_color_index[n] >= num_colors ) {
+        current_color_index[n] = 0;
+      }
+    }
+    delay(sleep_time);
+  }
+}
+
+void rainbow(int num_rainbow_loops, unsigned int delay_time = 4)
 {
   boolean all_strips[] = {true, true, true};
   int hue;
@@ -163,7 +181,7 @@ void rainbow(int num_rainbow_loops)
       hue = hue + 1;
       // Use FastLED automatic HSV->RGB conversion
       showAnalogRGBs( all_strips, CHSV( hue, 255, 255) );
-      delay(4);
+      delay(delay_time);
       //delay(2353);
     }
   }
@@ -204,6 +222,25 @@ void xmas_run(const int outer_loops)
   }
 }
 
+void han_run(const int outer_loops)
+{
+  all_off();
+  const int delay_time = 800;
+  int i;
+  int j;
+  for (j = 0; j < outer_loops; j++) {
+    for (i = 0; i < numStrips; i++) {
+      showAnalogRGB( i, CRGB::Blue  /* CHSV( 152, 255, 77 ) */ ); delay(delay_time);
+    }
+    for (i = 0; i < numStrips; i++) {
+      showAnalogRGB( i, CRGB::White ); delay(delay_time);
+    }
+    for (i = 0; i < numStrips; i++) {
+      showAnalogRGB( i, CRGB::Black ); delay(delay_time);
+    }
+  }
+}
+
 void random_xmas(const int switches)
 {
   all_off();
@@ -217,6 +254,26 @@ void random_xmas(const int switches)
       showAnalogRGB( led_strip, CRGB::Red );
     } else if (color_i < 90) {
       showAnalogRGB( led_strip, CRGB::Green );
+    } else {
+      showAnalogRGB( led_strip, CRGB::Black );
+    }
+    delay(500);
+  }
+}
+
+void random_han(const int switches)
+{
+  all_off();
+  int i;
+  int led_strip;
+  int color_i;
+  for (i = 0; i < switches; i++) {
+    led_strip = random(0, numStrips);
+    color_i = random(0, 100);
+    if (color_i < 45) {
+      showAnalogRGB( led_strip, CHSV( 152, 255, 77 )  );
+    } else if (color_i < 90) {
+      showAnalogRGB( led_strip, CRGB::White );
     } else {
       showAnalogRGB( led_strip, CRGB::Black );
     }
@@ -300,6 +357,52 @@ void vday(int switches)
   }
 }
 
+void halloween(int switches)
+{
+  all_off();
+  int i;
+  int led_strip;
+  int color_i;
+  for (i = 0; i < switches; i++) {
+    showAnalogRGB( 0, CRGB::OrangeRed );
+    showAnalogRGB( 2, CRGB::OrangeRed );
+    showAnalogRGB( 1, CRGB::OrangeRed );
+    delay(ONTIME);
+  }
+}
+
+void patriotic(int switches)
+{
+  all_off();
+  int i;
+  int led_strip;
+  int color_i;
+  for (i = 0; i < switches; i++) {
+    showAnalogRGB( 2, CRGB::Blue );
+    showAnalogRGB( 0, CRGB::Red );
+    showAnalogRGB( 1, CRGB::White );
+    delay(60000);
+  }
+}
+
+void cubs(int switches)
+{
+  all_off();
+  int i;
+  int led_strip;
+  int color_i;
+  for (i = 0; i < switches; i++) {
+    showAnalogRGB( 0, CRGB::Blue );
+    showAnalogRGB( 1, CRGB::Red );
+    showAnalogRGB( 2, CRGB::Blue );
+    delay(60000);
+    showAnalogRGB( 0, CRGB::Red );
+    showAnalogRGB( 1, CRGB::Blue );
+    showAnalogRGB( 2, CRGB::Red );
+    delay(60000);
+  }
+}
+
 void gb_slow(int switches)
 {
   all_off();
@@ -320,15 +423,23 @@ void gb_slow(int switches)
 
 void loop()
 {
-  lakers_slow(4);
-  //rainbow(10);
+  //lakers_slow(4);
   //rainbow_forever();
+  unsigned int delay_time = random(400, 5000);
+  //pride(int(12.0*5000.0/float(delay_time)), delay_time);
+  //delay_time = random(4, 40);
+  //rainbow(int(120.0/float(delay_time)), delay_time);
+  //patriotic(4);
+  //halloween(4);
   //cal_flash(5);
   //cal_slow(4);
+  //cubs(1000);
   //gb_slow(4);
 
-  //xmas_run(2);
-  //random_xmas(100);
-  //slow_xmas_fade();
+  han_run(2);
+  //random_han(100);
+  xmas_run(3);
+  random_xmas(100);
+  slow_xmas_fade();
   //vday(5);
 }
